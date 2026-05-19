@@ -19,7 +19,7 @@ async function getDashboardData() {
   );
 
   const productsResponse = await fetch(
-    "http://localhost:3000/api/products",
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/products`,
     {
       cache: "no-store",
       headers: {
