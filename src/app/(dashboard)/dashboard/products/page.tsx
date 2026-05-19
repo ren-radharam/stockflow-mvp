@@ -6,6 +6,13 @@ import { toast } from "sonner";
 
 import { AddProductDialog } from "@/components/products/add-product-dialog";
 
+import { EditProductDialog } from "@/components/products/edit-product-dialog";
+
+import {
+  Pencil,
+  Trash2,
+} from "lucide-react";
+
 interface Product {
   id: string;
   name: string;
@@ -14,11 +21,27 @@ interface Product {
 }
 
 export default function ProductsPage() {
+  const [search, setSearch] =
+  useState("");
+
   const [products, setProducts] =
     useState<Product[]>([]);
 
   const [loading, setLoading] =
     useState(true);
+
+  const [editOpen, setEditOpen] =
+    useState(false);
+  
+  const [selectedProduct, setSelectedProduct] =
+    useState<Product | null>(null);
+
+  const filteredProducts =
+  products.filter((product) =>
+    product.name
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
 
   async function fetchProducts() {
     try {
@@ -103,6 +126,41 @@ export default function ProductsPage() {
         </div>
 
         <AddProductDialog />
+      </div>
+
+      <div
+        className="
+          mb-6
+          flex
+          items-center
+          justify-between
+          gap-4
+        "
+      >
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={search}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
+          className="
+            h-11
+            w-full
+            max-w-sm
+            rounded-xl
+            border
+            border-white/10
+            bg-white/[0.03]
+            px-4
+            text-sm
+            text-white
+            outline-none
+            backdrop-blur-xl
+            placeholder:text-zinc-500
+            focus:border-blue-500
+          "
+        />
       </div>
 
       <div
@@ -207,7 +265,7 @@ export default function ProductsPage() {
                 </td>
               </tr>
             ) : (
-              products.map((product) => (
+              filteredProducts.map((product) => (
                 <tr
                   key={product.id}
                   className="
@@ -263,28 +321,48 @@ export default function ProductsPage() {
                     </span>
                   </td>
 
-                  <td
-                    className="
-                      px-6
-                      py-4
-                      text-right
-                    "
-                  >
-                    <button
-                      onClick={() =>
-                        handleDelete(
-                          product.id
-                        )
-                      }
+                  <td className="px-6 py-4">
+                    <div
                       className="
-                        text-sm
-                        text-red-400
-                        transition
-                        hover:text-red-300
+                        flex
+                        items-center
+                        justify-end
+                        gap-4
                       "
                     >
-                      Delete
-                    </button>
+                      <button
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setEditOpen(true);
+                        }}
+                        className="
+                          rounded-lg
+                          p-2
+                          text-blue-400
+                          transition
+                          hover:bg-blue-500/10
+                          hover:text-blue-300
+                        "
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          handleDelete(product.id)
+                        }
+                        className="
+                          rounded-lg
+                          p-2
+                          text-red-400
+                          transition
+                          hover:bg-red-500/10
+                          hover:text-red-300
+                        "
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -292,6 +370,13 @@ export default function ProductsPage() {
           </tbody>
         </table>
       </div>
+
+      <EditProductDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        product={selectedProduct}
+      />
+      
     </div>
   );
 }

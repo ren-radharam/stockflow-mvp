@@ -1,12 +1,14 @@
 import { cookies } from "next/headers";
 
-async function getDashboardStats() {
+import { InventoryChart } from "@/components/dashboard/inventory-chart";
+
+async function getDashboardData() {
   const cookieStore = await cookies();
 
   const token =
     cookieStore.get("token")?.value;
 
-  const response = await fetch(
+  const statsResponse = await fetch(
     "http://localhost:3000/api/dashboard/stats",
     {
       cache: "no-store",
@@ -16,20 +18,43 @@ async function getDashboardStats() {
     }
   );
 
-  if (!response.ok) {
-    return {
-      totalProducts: 0,
-      lowStockProducts: 0,
-      inventoryValue: 0,
-    };
-  }
+  const productsResponse = await fetch(
+    "http://localhost:3000/api/products",
+    {
+      cache: "no-store",
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    }
+  );
 
-  return response.json();
+  const stats = statsResponse.ok
+    ? await statsResponse.json()
+    : {
+        totalProducts: 0,
+        lowStockProducts: 0,
+        inventoryValue: 0,
+      };
+
+  const productsData =
+  productsResponse.ok
+    ? await productsResponse.json()
+    : [];
+    
+  const products =
+    Array.isArray(productsData)
+      ? productsData
+      : productsData.products || [];
+
+  return {
+    stats,
+    products,
+  };
 }
 
 export default async function DashboardPage() {
-  const stats =
-    await getDashboardStats();
+  const { stats, products } =
+    await getDashboardData();
 
   const cards = [
     {
@@ -49,6 +74,12 @@ export default async function DashboardPage() {
       value: "—",
     },
   ];
+
+  const chartData =
+    products.map((product: any) => ({
+      name: product.name,
+      quantity: product.quantity,
+    }));
 
   return (
     <div className="space-y-8">
@@ -114,6 +145,10 @@ export default async function DashboardPage() {
           </div>
         ))}
       </div>
+
+      <InventoryChart
+        data={chartData}
+      />
     </div>
   );
 }
