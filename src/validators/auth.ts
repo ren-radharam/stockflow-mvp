@@ -6,7 +6,6 @@ export const signupSchema = z.object({
     .min(2, "Organization name is required"),
 
   email: z
-    .string()
     .email("Invalid email"),
 
   password: z
@@ -16,7 +15,6 @@ export const signupSchema = z.object({
 
 export const loginSchema = z.object({
   email: z
-    .string()
     .email("Invalid email"),
 
   password: z

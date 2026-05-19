@@ -83,14 +83,14 @@ export function SignupForm() {
           name="organizationName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-200">
+              <FormLabel className="text-zinc-300">
                 Organization Name
               </FormLabel>
 
               <FormControl>
                 <Input
                   placeholder="Acme Inc."
-                  className="border-white/10 bg-zinc-950/40 text-white"
+                  className="border-zinc-800 bg-zinc-950/50 text-white focus-visible:ring-1 focus-visible:ring-violet-500"
                   {...field}
                 />
               </FormControl>
@@ -105,7 +105,7 @@ export function SignupForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-200">
+              <FormLabel className="text-zinc-300">
                 Email
               </FormLabel>
 
@@ -113,7 +113,7 @@ export function SignupForm() {
                 <Input
                   type="email"
                   placeholder="you@example.com"
-                  className="border-white/10 bg-zinc-950/40 text-white"
+                  className="border-zinc-800 bg-zinc-950/50 text-white focus-visible:ring-1 focus-visible:ring-violet-500"
                   {...field}
                 />
               </FormControl>
@@ -128,7 +128,7 @@ export function SignupForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-zinc-200">
+              <FormLabel className="text-zinc-300">
                 Password
               </FormLabel>
 
@@ -136,7 +136,7 @@ export function SignupForm() {
                 <Input
                   type="password"
                   placeholder="••••••••"
-                  className="border-white/10 bg-zinc-950/40 text-white"
+                  className="border-zinc-800 bg-zinc-950/50 text-white focus-visible:ring-1 focus-visible:ring-violet-500"
                   {...field}
                 />
               </FormControl>
@@ -149,7 +149,7 @@ export function SignupForm() {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full"
+          className="h-10 w-full bg-white text-black transition-all hover:scale-[1.01] hover:bg-zinc-200"
         >
           {isLoading ? (
             <Loader2 className="h-4 w-4 animate-spin" />

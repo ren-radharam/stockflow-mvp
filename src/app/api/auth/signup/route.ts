@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { ZodError } from "zod";
 
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/auth";
@@ -63,10 +64,25 @@ export async function POST(req: Request) {
     return response;
   } catch (error) {
     console.error(error);
-
+  
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        {
+          error: error.issues[0]?.message || "Invalid data",
+        },
+        {
+          status: 400,
+        }
+      );
+    }
+  
     return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
+      {
+        error: "Internal server error",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }
