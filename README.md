@@ -2,6 +2,10 @@
 
 Modern inventory management dashboard built with Next.js 15, Prisma, PostgreSQL, and Tailwind CSS.
 
+## Live Demo
+
+https://stockflow-mvp-tawny.vercel.app/
+
 ## Features
 
 - Authentication
