@@ -37,7 +37,7 @@ export function Sidebar() {
         w-64
         border-r
         border-white/10
-        bg-black/40
+        bg-black/30
         backdrop-blur-xl
         lg:flex
         lg:flex-col
@@ -46,10 +46,14 @@ export function Sidebar() {
       <div className="border-b border-white/10 p-6">
         <h1
           className="
+            bg-gradient-to-r
+            from-white
+            to-zinc-400
+            bg-clip-text
             text-2xl
-            font-semibold
+            font-bold
             tracking-tight
-            text-white
+            text-transparent
           "
         >
           StockFlow
@@ -72,6 +76,7 @@ export function Sidebar() {
               key={link.href}
               href={link.href}
               className={`
+                group
                 flex
                 items-center
                 gap-3
@@ -81,21 +86,59 @@ export function Sidebar() {
                 text-sm
                 font-medium
                 transition-all
+                duration-200
 
                 ${
                   active
-                    ? "bg-white text-black"
-                    : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                    ? `
+                      bg-white
+                      text-black
+                      shadow-lg
+                      shadow-white/10
+                    `
+                    : `
+                      text-zinc-400
+                      hover:bg-white/5
+                      hover:text-white
+                    `
                 }
               `}
             >
-              <Icon className="h-4 w-4" />
+              <Icon
+                className="
+                  h-4
+                  w-4
+                  transition-transform
+                  duration-200
+                  group-hover:scale-110
+                "
+              />
 
               {link.label}
             </Link>
           );
         })}
       </nav>
+
+      <div className="border-t border-white/10 p-4">
+        <div
+          className="
+            rounded-xl
+            border
+            border-white/10
+            bg-white/[0.03]
+            p-4
+          "
+        >
+          <p className="text-xs text-zinc-500">
+            StockFlow v1.0
+          </p>
+
+          <p className="mt-1 text-sm text-zinc-300">
+            Manage your inventory smarter.
+          </p>
+        </div>
+      </div>
     </aside>
   );
 }

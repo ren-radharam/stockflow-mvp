@@ -36,8 +36,9 @@ export default function DashboardPage() {
               className="
                 rounded-2xl
                 border
-                border-white/10
-                bg-white/[0.03]
+                border-zinc-800
+                bg-zinc-900/40
+                shadow-[0_0_40px_rgba(255,255,255,0.03)]
                 p-6
                 backdrop-blur-xl
               "

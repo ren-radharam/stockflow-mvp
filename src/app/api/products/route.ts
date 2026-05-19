@@ -40,7 +40,9 @@ export async function GET(
         },
       });
 
-    return NextResponse.json(products);
+      return NextResponse.json({
+        products,
+      });
   } catch (error) {
     console.error(error);
 
