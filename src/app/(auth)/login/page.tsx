@@ -1,5 +1,7 @@
 import { LoginForm } from "@/components/auth/login-form";
 
+import Link from "next/link";
+
 export default function LoginPage() {
   return (
     <main
@@ -50,6 +52,21 @@ export default function LoginPage() {
 
       <div className="relative z-10 w-full">
         <LoginForm />
+
+        <p className="text-center text-sm text-zinc-400">
+        Don&apos;t have an account?{" "}
+        
+        <Link
+            href="/signup"
+            className="
+            text-blue-400
+            transition
+            hover:text-blue-300
+            "
+        >
+            Create account
+        </Link>
+      </p>
       </div>
     </main>
   );
