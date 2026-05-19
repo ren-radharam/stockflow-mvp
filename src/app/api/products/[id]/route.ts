@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";
 
-export async function DELETE(
-  req: Request,
+export async function PUT(
+  req: NextRequest,
   context: {
     params: Promise<{
       id: string;
@@ -13,33 +13,85 @@ export async function DELETE(
 ) {
   try {
     const token =
-      req.headers
-        .get("cookie")
-        ?.split("token=")[1]
-        ?.split(";")[0];
+      req.cookies.get("token")?.value;
 
     if (!token) {
       return NextResponse.json(
-        {
-          error: "Unauthorized",
-        },
-        {
-          status: 401,
-        }
+        { error: "Unauthorized" },
+        { status: 401 }
       );
     }
 
-    const verified =
+    const payload =
       await verifyToken(token);
 
-    if (!verified) {
+    if (!payload) {
       return NextResponse.json(
-        {
-          error: "Unauthorized",
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { id } =
+      await context.params;
+
+    const body = await req.json();
+
+    const updatedProduct =
+      await prisma.product.update({
+        where: {
+          id,
         },
-        {
-          status: 401,
-        }
+        data: {
+          name: body.name,
+          sku: body.sku,
+          quantity: body.quantity,
+        },
+      });
+
+    return NextResponse.json(
+      updatedProduct
+    );
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        error: "Something went wrong",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  context: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
+) {
+  try {
+    const token =
+      req.cookies.get("token")?.value;
+
+    if (!token) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const payload =
+      await verifyToken(token);
+
+    if (!payload) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
       );
     }
 
@@ -60,8 +112,7 @@ export async function DELETE(
 
     return NextResponse.json(
       {
-        error:
-          "Failed to delete product",
+        error: "Something went wrong",
       },
       {
         status: 500,
