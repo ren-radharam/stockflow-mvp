@@ -9,7 +9,7 @@ async function getDashboardData() {
     cookieStore.get("token")?.value;
 
   const statsResponse = await fetch(
-    "http://localhost:3000/api/dashboard/stats",
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/dashboard/stats`,
     {
       cache: "no-store",
       headers: {
