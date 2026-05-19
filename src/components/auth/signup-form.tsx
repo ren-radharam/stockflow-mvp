@@ -46,11 +46,10 @@ export function SignupForm() {
 
       const response = await fetch("/api/auth/signup", {
         method: "POST",
-
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify(values),
       });
 
@@ -64,7 +63,7 @@ export function SignupForm() {
 
       toast.success("Account created successfully");
 
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } catch {
       toast.error("Something went wrong");
     } finally {

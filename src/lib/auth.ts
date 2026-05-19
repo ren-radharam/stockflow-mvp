@@ -1,21 +1,45 @@
-import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET!;
+import { SignJWT, jwtVerify } from "jose";
 
 export interface JwtPayload {
   userId: string;
   organizationId: string;
 }
 
-export function signToken(payload: JwtPayload) {
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: "7d",
-  });
+function getSecretKey() {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error("JWT_SECRET is not set");
+  }
+
+  return new TextEncoder().encode(secret);
 }
 
-export function verifyToken(token: string) {
+export async function signToken(payload: JwtPayload) {
+  return new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(getSecretKey());
+}
+
+export async function verifyToken(
+  token: string
+): Promise<JwtPayload | null> {
   try {
-    return jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const { payload } = await jwtVerify(token, getSecretKey());
+
+    if (
+      typeof payload.userId !== "string" ||
+      typeof payload.organizationId !== "string"
+    ) {
+      return null;
+    }
+
+    return {
+      userId: payload.userId,
+      organizationId: payload.organizationId,
+    };
   } catch {
     return null;
   }

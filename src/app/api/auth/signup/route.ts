@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       },
     });
 
-    const token = signToken({
+    const token = await signToken({
       userId: user.id,
       organizationId: organization.id,
     });

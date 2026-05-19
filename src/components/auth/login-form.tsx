@@ -40,17 +40,14 @@ export function LoginForm() {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       const result =
         await response.json();
@@ -68,7 +65,7 @@ export function LoginForm() {
         "Welcome back!"
       );
 
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } catch {
       toast.error(
         "Something went wrong"
