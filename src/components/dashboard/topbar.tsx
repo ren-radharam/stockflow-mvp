@@ -1,57 +1,60 @@
+"use client";
+
+import { LogOut } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+
 export function Topbar() {
-    return (
-      <header
-        className="
-          flex
-          h-16
-          items-center
-          justify-between
-          border-b
-          border-white/10
-          bg-black/30
-          px-6
-          backdrop-blur-xl
-        "
-      >
-        <div>
-          <h2
-            className="
-              text-lg
-              font-semibold
-              text-white
-            "
-          >
-            Dashboard
-          </h2>
-  
-          <p className="text-sm text-zinc-500">
-            Manage your inventory
-          </p>
-        </div>
-  
-        <div
+  async function handleLogout() {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+
+    window.location.href = "/login";
+  }
+
+  return (
+    <header
+      className="
+        flex
+        items-center
+        justify-between
+        border-b
+        border-white/10
+        px-6
+        py-4
+      "
+    >
+      <div>
+        <h2
           className="
-            flex
-            items-center
-            gap-3
+            text-xl
+            font-semibold
+            text-white
           "
         >
-          <div
-            className="
-              flex
-              h-10
-              w-10
-              items-center
-              justify-center
-              rounded-full
-              bg-white
-              font-medium
-              text-black
-            "
-          >
-            R
-          </div>
-        </div>
-      </header>
-    );
+          Dashboard
+        </h2>
+
+        <p className="text-sm text-zinc-500">
+          Manage your inventory
+        </p>
+      </div>
+
+      <Button
+        onClick={handleLogout}
+        variant="outline"
+        className="
+          border-white/10
+          bg-white/5
+          text-white
+          hover:bg-white/10
+          hover:text-white
+        "
+      >
+        <LogOut className="mr-2 h-4 w-4" />
+        Logout
+      </Button>
+    </header>
+  );
 }
